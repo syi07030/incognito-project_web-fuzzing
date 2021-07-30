@@ -1,39 +1,30 @@
-# python3 XSSFuzzing.py -u https://127.0.0.1
+# python xssfuzzing.py -u https://url.com
 
 import sys
-import argparse
 
 from requester import requester
 from config import fuzzes, converter, headers
-"""
+
+"""URL option
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--url', help='url', dest='target')
 args = parser.parse_args()
-
 target = args.target
 """
 
-target = input("url을 입력하세요 : ")
-paramData, target = converter(target)
+target = sys.argv[1]
 
-if not target.startswith('http'):
-    try:
-        response = requester('https://' + target, headers, paramData)
-        target = 'https://' + target
-    except:
-        target = 'http://' + target
+paramData, target = converter(target)
 
 if requester(target, headers, paramData) == -1:
     sys.exit(-1)
 
-print()
-print('======= Starting Fuzzing =======')
+print('\n======= Starting Fuzzing =======\n')
 
 for fuzz in fuzzes:
-    print()
     paramData[list(paramData.keys())[0]] = fuzz
     try:
         requester(target, headers, paramData)
-        print('[Pass] : '+fuzz)
+        print('[Pass] : '+fuzz+'\n')
     except:
-        print('[Error] : '+fuzz)
+        print('[Error] : '+fuzz+'\n')
