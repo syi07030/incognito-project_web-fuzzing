@@ -1,9 +1,10 @@
-# python xssfuzzing.py -u https://url.com
+# python xssfuzzing.py https://url.com
 
 import sys
 
 from requester import requester
-from config import fuzzes, converter, headers
+from config import fuzzes, headers
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
 """URL option
 parser = argparse.ArgumentParser()
@@ -14,17 +15,21 @@ target = args.target
 
 target = sys.argv[1]
 
-paramData, target = converter(target)
+#paramData, target = converter(target)
 
-if requester(target, headers, paramData) == -1:
+if requester(target, headers) == -1:
     sys.exit(-1)
 
 print('\n======= Starting Fuzzing =======\n')
 
 for fuzz in fuzzes:
-    paramData[list(paramData.keys())[0]] = fuzz
+    parts = urlparse(target)
+    qsl = dict(parse_qsl(parts.query))
+    qsl[list(qsl.keys())[0]] = fuzz
+    parts = parts._replace(query=urlencode(qsl))
+    new_target = urlunparse(parts)
     try:
-        requester(target, headers, paramData)
+        requester(new_target, headers)
         print('[Pass] : '+fuzz+'\n')
     except:
         print('[Error] : '+fuzz+'\n')
