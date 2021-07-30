@@ -6,7 +6,7 @@ from selenium import webdriver
 
 timeout = 10
 
-def requester(url, headers, paramData):
+def requester(url, headers):
     warnings.filterwarnings('ignore', message='Unverified HTTPS request')
     user_agents = ['Mozilla/5.0 (X11; Linux i686; rv:60.0) Gecko/20100101 Firefox/60.0',
                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
@@ -14,10 +14,10 @@ def requester(url, headers, paramData):
     if headers['User-Agent'] == '$':
         headers['User-Agent'] = random.choice(user_agents)
     try:
-        response = requests.get(url=url, params=paramData, timeout=timeout, verify=False)
-        print('Requester url: {}'.format(response.url))
+        response = requests.get(url=url, timeout=timeout, verify=False)
+        print('Requester url: {}'.format(url))
     except:
-        print('[Error in requester] : ', response.url)
+        print('[Error in requester] : ', url)
         return -1
 
     try:
@@ -25,7 +25,7 @@ def requester(url, headers, paramData):
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_argument("headless")
         driver = webdriver.Chrome(executable_path="C:/Users/82103/Desktop/incog/chromedriver.exe", options=options)
-        driver.get(response.url)
+        driver.get(url)
         result = driver.switch_to_alert()   # alert
         print('*** [Alert] ***')
         result.dismiss()
