@@ -2,8 +2,8 @@ import sys
 import requests as req
 import urllib
 import argparse
-from requester import requester
-from config import converter, headers  
+#from requester import requester
+#from config import converter, headers  
 from requests.exceptions import HTTPError
 from itertools import permutations
 
@@ -16,14 +16,11 @@ def random_path(url):
     alphabets = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n',
             'o','p','q','r','s','t','u','v','w','x','y','z']
     random_success = []
-    nn = 3 #length
-    path_permutaion= list(permutations(alphabets,nn))
+    nn = 2 #length
+    path_permutation= list(permutations(alphabets,nn))
     paths = []
-    for i in path_permutaion:
-        new_path = ""
-        for j in nn:
-            new_path += i[nn]
-        paths.append(new_path)
+    for i in path_permutation:
+        paths.append("".join(i))
     for path in paths:
         try:
             res = req.post(url+path)  
@@ -88,16 +85,16 @@ def existed_path(url):
 if __name__ == "__main__":
     print("=============start============")
     url = input("target url: ")
-    paramData, url = converter(url)
-    if not url.startswith('http'):
-        try:
-            response = requester('https://' + url, headers, paramData)
-            url = 'https://' + url
-        except:
-            url = 'http://' + url
-
-    if requester(url, headers, paramData) == -1:
-        sys.exit(-1)
+#    paramData, url = converter(url)
+#    if not url.startswith('http'):
+#        try:
+#            response = requester('https://' + url, headers, paramData)
+#            url = 'https://' + url
+#        except:
+#            url = 'http://' + url
+#
+#    if requester(url, headers, paramData) == -1:
+#        sys.exit(-1)
     
     random_success = random_path(url)
     existed_success = existed_path(url)
