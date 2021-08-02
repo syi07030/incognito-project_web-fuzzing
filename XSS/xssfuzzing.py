@@ -33,6 +33,5 @@ for fuzz in fuzzes:
         new_target = target+'?'+quote(fuzz)
     try:
         requester(new_target, headers)
-        print('[Pass] : '+fuzz+'\n')
     except:
-        print('[Error] : '+fuzz+'\n')
+        print('[Error] : '+new_target+'\n')
