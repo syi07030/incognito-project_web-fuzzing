@@ -15,7 +15,6 @@ def requester(url, headers):
         headers['User-Agent'] = random.choice(user_agents)
     try:
         response = requests.get(url=url, timeout=timeout, verify=False)
-        print('Requester url: {}'.format(url))
     except:
         print('[Error in requester] : ', url)
         return -1
@@ -27,9 +26,10 @@ def requester(url, headers):
         driver = webdriver.Chrome(executable_path="C:/Users/82103/Desktop/incog/chromedriver.exe", options=options)
         driver.get(url)
         result = driver.switch_to_alert()   # alert
-        print('*** [Alert] ***')
+        print('[Alert] : '+url+'\n')
         result.dismiss()
     except:
-        print('*** [No Alert] ***')
+        # print('[No Alert] : '+url+'\n')
+        pass
 
     return response
