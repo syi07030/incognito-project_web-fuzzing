@@ -4,7 +4,7 @@ import sys
 
 from requester import requester
 from config import fuzzes, headers
-from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, quote
 
 """URL option
 parser = argparse.ArgumentParser()
@@ -25,9 +25,12 @@ print('\n======= Starting Fuzzing =======\n')
 for fuzz in fuzzes:
     parts = urlparse(target)
     qsl = dict(parse_qsl(parts.query))
-    qsl[list(qsl.keys())[0]] = fuzz
-    parts = parts._replace(query=urlencode(qsl))
-    new_target = urlunparse(parts)
+    if bool(qsl):
+        qsl[list(qsl.keys())[0]] = fuzz
+        parts = parts._replace(query=urlencode(qsl))
+        new_target = urlunparse(parts)
+    else:
+        new_target = target+'?'+quote(fuzz)
     try:
         requester(new_target, headers)
         print('[Pass] : '+fuzz+'\n')
