@@ -17,15 +17,12 @@ if __name__ == "__main__":
 #        sys.exit(-1)
 
     print(">>>sql injection<<<")
-    parser = sqli.optparse.OptionParser(version=sqli.VERSION)
-    parser.add_option("-u", "--url", dest="url", help="Target URL (e.g. \"http://www.target.com/page.php?id=1\")")
-    parser.add_option("--data", dest="data", help="POST data (e.g. \"query=test\")")
-    options, _ = parser.parse_args()
-    if options.url:
-        result = sqli.scan_page(options.url if options.url.startswith("http") else "http://%s" % options.url, options.data)
+    if __name__ == "__main__":
+    if url:
+        result = scan_page(url if url.startswith("http") else "http://%s" % url, None)
         print("\nscan results: %s vulnerabilities found" % ("possible" if result else "no"))
     else:
-        parser.print_help()
+        print("wrong input")
 
     print(">>>path traversal<<<")
     print("Random Success: ",directory_fuzzer.random_path(url))
