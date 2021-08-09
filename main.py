@@ -1,6 +1,6 @@
 import directory_fuzzer
 import sqli
-from XSS import xssfuzzing
+import xssfuzzing
 
 if __name__ == "__main__":
     print("=============start============")
