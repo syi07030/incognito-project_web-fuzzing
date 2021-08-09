@@ -3,6 +3,7 @@ import requests
 import warnings
 
 from selenium import webdriver
+import chromedriver_autoinstaller
 
 timeout = 10
 
@@ -23,13 +24,13 @@ def requester(url, headers):
         options = webdriver.ChromeOptions()
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_argument("headless")
-        driver = webdriver.Chrome(executable_path="C:/Users/82103/Desktop/incog/chromedriver.exe", options=options)
+        path = chromedriver_autoinstaller.install()
+        driver = webdriver.Chrome(executable_path=path, options=options)
         driver.get(url)
-        result = driver.switch_to_alert()   # alert
+        result = driver.switch_to_alert()   # alert check
         print('[Alert] : '+url+'\n')
         result.dismiss()
     except:
-        # print('[No Alert] : '+url+'\n')
         pass
 
     return response
