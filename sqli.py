@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 import difflib, http.client, itertools, optparse, random, re, urllib, urllib.parse, urllib.request  # Python 3 required
 
-VERSION = "0.3b"
-#NAME, VERSION, AUTHOR, LICENSE = "Damn Small SQLi Scanner (DSSS) < 100 LoC (Lines of Code)", "0.3b", "Miroslav Stampar (@stamparm)", "Public domain (FREE)"
-
 PREFIXES, SUFFIXES = (" ", ") ", "' ", "') "), ("", "-- -", "#", "%%16")            # prefix/suffix values used for building testing blind payloads
 TAMPER_SQL_CHAR_POOL = ('(', ')', '\'', '"')                                        # characters used for SQL tampering/poisoning of parameter values
 BOOLEAN_TESTS = ("AND %d=%d", "OR NOT (%d>%d)")                                     # boolean tests used for building testing blind payloads
@@ -84,24 +81,10 @@ def scan_page(url, data=None):
     except KeyboardInterrupt:
         print("\r (x) Ctrl-C pressed")
     return retval
-#
-# def init_options(proxy=None, cookie=None, ua=None, referer=None):
-#     globals()["_headers"] = dict(filter(lambda _: _[1], ((COOKIE, cookie), (UA, ua or NAME), (REFERER, referer))))
-#     urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler({'http': proxy})) if proxy else None)
 
 if __name__ == "__main__":
-#    print("%s #v%s\n by: %s\n" % (NAME, VERSION, AUTHOR))
-    parser = optparse.OptionParser(version=VERSION)
-    parser.add_option("-u", "--url", dest="url", help="Target URL (e.g. \"http://www.target.com/page.php?id=1\")")
-    parser.add_option("--data", dest="data", help="POST data (e.g. \"query=test\")")
-#     parser.add_option("--cookie", dest="cookie", help="HTTP Cookie header value")
-#     parser.add_option("--user-agent", dest="ua", help="HTTP User-Agent header value")
-#     parser.add_option("--referer", dest="referer", help="HTTP Referer header value")
-#     parser.add_option("--proxy", dest="proxy", help="HTTP proxy address (e.g. \"http://127.0.0.1:8080\")")
-    options, _ = parser.parse_args()
-    if options.url:
-  #      init_options(options.proxy, options.cookie, options.ua, options.referer)
-        result = scan_page(options.url if options.url.startswith("http") else "http://%s" % options.url, options.data)
+    if url:
+        result = scan_page(url if url.startswith("http") else "http://%s" % url, None)
         print("\nscan results: %s vulnerabilities found" % ("possible" if result else "no"))
     else:
-        parser.print_help()
+        print("wrong input")
