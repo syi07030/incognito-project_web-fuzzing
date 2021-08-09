@@ -17,7 +17,6 @@ if __name__ == "__main__":
 #        sys.exit(-1)
 
     print(">>>sql injection<<<")
-    if __name__ == "__main__":
     if url:
         result = scan_page(url if url.startswith("http") else "http://%s" % url, None)
         print("\nscan results: %s vulnerabilities found" % ("possible" if result else "no"))
